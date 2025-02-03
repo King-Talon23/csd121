@@ -1,0 +1,110 @@
+Criteria:
+
+8.1. Uses at least two different types of variables (done)
+
+8.2. Uses at least one conditional statement (done)
+
+8.3. Uses at least one loop (done)
+
+8.4. Obtains keyboard input from the user in some way (done)
+
+8.5. Prints information to the console (done)
+
+8.6. Writes information to a file (done)
+
+8.7. Gracefully handles errors using try/catch (done)
+
+8.8. Uses a List or array in a meaningful way (done)
+
+8.9. A function that accepts at least one argument and returns a value is defined and used (done)
+
+8.10. JavaDoc to document the function(s) you create (done)
+
+8.11. Other code comments as appropriate (done)
+
+
+Jan 8th, 2025 - Initial Project Idea: The main idea is a bowling type of game. The user will set the starting position
+of the ball using left/right buttons. Hitting the front center pin is the only way to strike, the ball will move through
+the lane while it travels, and will fall into the gutter if it curves too far. The gutter balls will be caught with a
+try catch since going out of the grid is throw an ArrayIndexOutOfBoundException. The user will have no control over the
+curve of the ball. The user will play ten games, all scores will be saved in a list and written toa separate file. If
+the project is closed during a set the user will be able to resume the game later using the scores written in the file.
+A message displaying the final score and scores for each game will be printed to the terminal. After a game has ended
+the user will be prompted in-terminal if they wish to play another game, the user will type Y or N to play again.
+
+Jan 10th, 2025 - Problem: Initially I was going to create the shootings row and then 4 separate rows each with
+5 column to create the bowling alley and the ball walk swap columns to simulate curvature in the ball. I realized that
+I could just make one 5 x 5 grid instead but doing this makes the left-right buttons to move the ball starting positions
+move the ball up and down instead of left and right. Setting the row/column values back to 1 x 5 causes it to move right
+to left.
+
+Jan 11th, 2025 - Solution: Still have no idea why it was moving up and down but the problems been solved. I scraped the
+entire piece of code responsible for setting the label positions and re-did it with a nested for loop to handle the X
+and Y values.
+
+Jan 12th, 2025 - Problem: I might have to rethink the entirety of how the project works, or walk back on a function.
+I made a function that allows me to put in a cell number instead of each row and column value of the cell but it's
+having unintended consequences elsewhere in the project. I'd like to keep it and i think if i go about this the right
+way it'll make my code alot easier to read but at the same time if i do it wrong this is gonna suck.
+
+Jan 12th, 2025 - Update: It's actually not causing as many problems as i first thought, it's straight forward enough, I
+just have to make sure the ball doesnt randomly go from one of the of the grid to the other.
+
+Jan 12th 2025 - Update: I've gotten fair bit more done, i created a new function to make adjusting the ball position
+easier. After a made a if else statement Java recommend i convert it to a switch statement? Wasnt sure what it was so i
+let the IDE convert it and its just like the Match structure from Python. I tried googling if there was a match type of
+structure in python the other day but nothing came up so its nice to just run into.
+
+Jan 13th, 2025 - Update: I've added a list of messages to display when the player hits a gutter ball. I think i'll add
+in the same sort of thing later for strikes but as of right now i have yet to implement the pins into the game.
+I've also made the shoot button go to the end of the alley using a timer loop and taken the curve logic out of the shoot
+button and put it into its own function to be called.
+
+Jan 14th, 2025 - Update: I've added cascade animations to hit pins, the pins are taken off the pinLocations array and
+the score is calculated using 10 - pinLocations.size(). i still have to add in strike logic because right now it just
+clears the whole list, giving 10 points, but thats not how real strikes work. i'm beginning to work on the new curve
+logic. It has to be updated since i've added two more columns since i created it.
+
+Jan 14th, 2025 - Update: The game now has images for the bowling pins, ball, and background alley. Alex suggested it and
+it turned out to be alot easier to implement than i thought, the game looks gret now.
+
+Jan 14th, 2025 - Update: It took me like an hour but i just ms painted a whole new background image for the alley cause
+last image was so compressed it hurt to look at. dunno if i'll draw pins and balls too or just keep what i have, they
+look fine as is. And earlier i redid the curve logic AGAIN, the game just seems too easy and i dont was strikes to
+happen every other ball.
+
+Jan 15th, 2025 - Update: Alright this is gonna be long. I've been working all day on the curve functions and no matter
+what i do it doesnt seem to work properly. The ball still finds a way to break the game and freeze in a spot or zig-zag
+through the pins. Theres a weird glitch where the ball PNG doesnt disappear if it gets to cell 7? and after the second
+or third ball is shot the front striking pin wont disappear when its supposed to. I've added a try catch in case it does
+dodge all pins so atleast theres that now. I also added a thing to write the final score of the 10 games to a file, only
+problem is the play will never actually get to the end of those 10 games. I dont know if it really counts as fulfilling
+the critera if it never actually happens. I have 4 hours between classes tomorrow and all day friday to make this game
+work. I may keep working on it afterwards just until im happy with it.
+
+Jan 16th, 2025 - Update: Its like 6am and the problem for the zig-zagging issues came to me in a dream. I just had to
+put all the positions between the pins in a list and check for it before i update the ball visually and adjust it left
+or right depending on the side its on/came from.
+
+Jan 16th, 2025 - Update: Most strikes were happening from the ball being diagonally adjacent from the front-strike pin
+so i reduced the chance strikes from those tiles. the leftClose and leftFar arrays were swaps, i was adding the wrong
+values to the wrong ones, now that its fixed the ball should move as planned.
+
+Jan 16th, 2025 - Update: I think i've fixed most of the issues, the only problem left if the pin animations arent
+playing correctly, which isnt really a big deal something just isnt getting counted right. After i have to do the whole
+write to a file thing again. The way i had it before was freezing the program but im sure it wont be that hard to
+implement, I just had it in a bad spot before.
+
+Jan 16th, 2025 - Update: Alright everything is working and done. There was a problem where the first throw of the ball
+would do nothing. I just wasnt resetting a counter variable. My file writing is done, I still have to make the window
+close after 10 innings but it's not needed necessarily. I'm going to spend tomorrow bug testing and optimizing. I might
+try to add proper strike logic so it acts like how ot does in real bowling but that may or may not happen. As of now
+it's finally in a complete state.
+
+Jan 17th, 2025 - Update: The game now closes after 10 games or done and the final scores along with scores per inning
+are written to score.txt. Next i'm going to work on proper strike logic, I know how i could do it with separate
+variables but i want to see if its possible with loops to avoid adding in 9-10 more variables.
+
+Jan 17th, 2025 - Final Update: No strike logic, i tried it about 4 different ways and each time i seemed to break
+something new. The pin animations broke, then the ball png would stick, then the ball wouldnt show up at all, so im
+leaving it out, strikes are just gonna be worth a flat 10 points and i'm officially done with this project
