@@ -1,12 +1,34 @@
 package lab3.ui;
 
+import lab3.game.wins.*;
+
 import java.util.*;
 
 public class Console {
     public static Integer currentPlayer = 1;
     static final List<String> availableCoords = new ArrayList<>();
     public static Map<String, String> tileMap = new HashMap<>();
-    public static boolean endGame = false;
+    public static boolean tieGame = false;
+    public static boolean playerOneWin = false;
+    public static boolean playerTwoWin = false;
+    private static final List<winCondition> winConditions = List.of(
+            new winCondition("a1", "a2", "a3"),
+            new winCondition("b1", "b2", "b3"),
+            new winCondition("c1", "c2", "c3"),
+            new winCondition("a1", "b1", "c1"),
+            new winCondition("a2", "b2", "c2"),
+            new winCondition("a3", "b3", "c3"),
+            new winCondition("a1", "b2", "c3"),
+            new winCondition("a3", "b2", "c1")
+    );
+
+    /*
+    I think the way im handling the win condition might be able to be done better, same with the game terminations in
+    the method below can probably be improved. I think the hashmap and the way im handling the board is the best, or
+    atleast pretty high up there on the list of way to do it. Some of these need to get moved to the game package and be
+     called in the main file.
+     */
+
     public static void boardDisplay() {
         String boardString = String.format(
                 """
@@ -20,8 +42,20 @@ public class Console {
                         """, tileMap.get("a1"), tileMap.get("a2"), tileMap.get("a3"), tileMap.get("b1"),
                 tileMap.get("b2"), tileMap.get("b3"), tileMap.get("c1"), tileMap.get("c2"), tileMap.get("c3"));
         System.out.printf(boardString);
-        if (endGame) {
-            // this is here so the board gets displayed as full before the termination
+
+        // these are here so the board gets displayed before the termination
+        if (playerOneWin) {
+            System.out.print("PLAYER ONE HAS WON");
+            System.exit(0);
+
+        }
+        if (playerTwoWin) {
+            System.out.print("PLAYER TWO HAS WON");
+            System.exit(0);
+
+        }
+        if (tieGame) {
+            System.out.print("Tie Game!);");
             System.exit(0);
         }
     }
@@ -68,6 +102,9 @@ public class Console {
                             "e.x: a1(top left), b2(middle), c3(bottom right)");
                 }
             }
+            if (checkWin()) {
+                playerOneWin = true;
+            }
             currentPlayer++;
         } else if (currentPlayer == 2) {
             while (true) {
@@ -83,6 +120,9 @@ public class Console {
                             "e.x: a1 -> top left, b2 -> middle, c3 -> bottom right");
                 }
             }
+            if (checkWin()) {
+                playerTwoWin = true;
+            }
             currentPlayer--;
         } else {
             currentPlayer = 1;
@@ -90,9 +130,19 @@ public class Console {
         }
 
         if (availableCoords.isEmpty()) {
-            System.out.print("Tie Game!");
-            endGame = true;
+            tieGame = true;
         }
+    }
+
+    public static boolean checkWin() {
+        for (winCondition wc : winConditions) {
+            if (tileMap.get(wc.coord1()).equals(tileMap.get(wc.coord2())) &&
+                    tileMap.get(wc.coord2()).equals(tileMap.get(wc.coord3())) &&
+                    !tileMap.get(wc.coord1()).equals(" ")) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
