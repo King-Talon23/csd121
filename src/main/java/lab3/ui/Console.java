@@ -13,9 +13,8 @@ public class Console {
     }
 
     public void displayBoard() {
-        board.displayBoard();
+        System.out.println(board);
     }
-
     public static void println(String message) {
         System.out.println(message);
     }

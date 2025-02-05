@@ -63,8 +63,9 @@ public class Board {
 
 
     // Display the board
-    public void displayBoard() {
-        System.out.printf(
+    @Override
+    public String toString() {
+        return String.format(
                 """
                 - |__1__|__2__|__3__|  
                 A |  %s  |  %s  |  %s  |
