@@ -1,26 +1,33 @@
 package lab3;
 
-import static lab3.ui.Console.*;
+import lab3.game.Board;
+import lab3.ui.Console;
 
 public class Main {
+    public static void main(String[] args) {
 
-    public static void main(String[] args) throws Exception {
-        fillCoordList();
-        fillHashMap();
+        Board board = new Board();
+        Console game = new Console(board);
+
         while (true) {
-            boardDisplay();
-            move();
+            game.displayBoard();
+            game.move();
+
+
+            if (board.checkWin()) {
+
+                game.displayBoard();
+                System.out.println("PLAYER " + game.getCurrentPlayer() + " HAS WON!");
+                break;
+            }
+
+            if (board.isTie()) {
+                game.displayBoard();
+                System.out.println("Tie Game!");
+                break;
+            }
+
+            game.switchPlayer();
         }
     }
-
-    // TODO: Initialize a TicTacToe game with a 3x3 board and two players
-
-    // while (true) {
-    // TODO: Display the board
-
-    // TODO: Check if the game is over or a draw, and if so display the result and exit
-
-    // TODO: Get the next move from the player and update the game state
-
 }
-
