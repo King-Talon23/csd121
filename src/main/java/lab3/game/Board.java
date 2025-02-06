@@ -5,8 +5,8 @@ import java.util.*;
 import static lab3.game.winRecord.callScore;
 
 public class Board {
-    private final Map<Coordinates, String> tileMap = new HashMap<>();
-    private final List<Coordinates> availableCoords = new ArrayList<>();
+    private static final Map<Coordinates, String> tileMap = new HashMap<>();
+    private static final List<Coordinates> availableCoords = new ArrayList<>();
 
     private static final List<lab3.game.winConditions> winConditions = List.of(
             new winConditions(Coordinates.A1, Coordinates.A2, Coordinates.A3),
@@ -19,7 +19,9 @@ public class Board {
             new winConditions(Coordinates.A3, Coordinates.B2, Coordinates.C1)
     );
 
-    private static final winRecord winRecord = new winRecord(0, 0);
+    static {
+        new winRecord(0, 0);
+    }
 
     public Board() {
         for (Coordinates coord : Coordinates.values()) {
@@ -32,13 +34,23 @@ public class Board {
     public int getWinScore(Integer player) {
         int currentWinnerScore;
         if (player == 1) {
-            callScore().incrementXWins();
+            callScore().gameWonX(); // increase score
             currentWinnerScore = callScore().XWins();
         } else {
-            callScore().incrementOWins();
+            callScore().gameWonO();
             currentWinnerScore = callScore().OWins();
         }
         return currentWinnerScore;
+    }
+
+    public static void resetGame() {
+        availableCoords.clear();
+
+        for (Coordinates coord : Coordinates.values()) {
+
+            tileMap.put(coord, " ");
+            availableCoords.add(coord);
+        }
     }
 //--------------------------------
 

@@ -17,17 +17,29 @@ public class Main {
             if (board.checkWin()) {
                 game.displayBoard();
                 Console.displayWin(game.getCurrentPlayer(), board.getWinScore(game.getCurrentPlayer()));
-
-                break;
+                if (game.rematch()) {
+                    Board.resetGame();
+                    game.resetPlayers(game.getCurrentPlayer());
+                    continue;
+                } else {
+                    break;
+                }
             }
 
             if (board.isTie()) {
                 game.displayBoard();
                 Console.displayTie();
-                break;
+                if (game.rematch()) {
+                    Board.resetGame();
+                    game.resetPlayers(game.getCurrentPlayer());
+                    continue;
+                } else {
+                    break;
+                }
             }
 
             game.switchPlayer();
+
         }
     }
 }

@@ -38,6 +38,40 @@ public class Console {
     public static void displayTie() {
         println("TIE GAME!!!");
     }
+
+    public boolean rematch() {
+        Scanner scanner = new Scanner(System.in);
+        println("Do both players wish to play again? (y/n)");
+        while (true) {
+            println("Player X?");
+            String playerX = scanner.nextLine().replaceAll(" ", "").toLowerCase();
+            if (!playerX.equals("y") && !playerX.equals("n")) {
+                println("please enter Y or N to continue.");
+            } else {
+                while (true) {
+                    println("Player O?");
+                    String playerO = scanner.nextLine().replaceAll(" ", "").toLowerCase();
+                    if (!playerO.equals("y") && !playerO.equals("n")) {
+                        println("please enter Y or N to continue.");
+                    } else {
+                        if (playerX.equals("y") && playerO.equals("y")) {
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    public void resetPlayers(Integer player) {
+        if (player != 1) {
+            currentPlayer = 1;
+        }
+    }
     //---------------------
     public void move() {
         Scanner scanner = new Scanner(System.in);
@@ -66,4 +100,6 @@ public class Console {
     public int getCurrentPlayer() {
         return currentPlayer;
     }
+
+
 }

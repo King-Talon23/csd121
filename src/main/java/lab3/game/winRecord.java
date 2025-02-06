@@ -7,14 +7,12 @@ public record winRecord(int XWins, int OWins) {
         return gameScore;
     }
 
-    public winRecord incrementXWins() {
+    public void gameWonX() {
         gameScore = new winRecord(this.XWins + 1, this.OWins);
-        return gameScore;
     }
 
-    public winRecord incrementOWins() {
+    public void gameWonO() {
         gameScore = new winRecord(this.XWins, this.OWins + 1);
-        return gameScore;
     }
 }
 
