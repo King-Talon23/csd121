@@ -31,7 +31,7 @@ public class Board {
         }
     }
 //new stuff------------------------
-    public int getWinScore(Integer player) {
+    public int getWinnerScore(Integer player) {
         int currentWinnerScore;
         if (player == 1) {
             callScore().gameWonX(); // increase score
@@ -39,6 +39,16 @@ public class Board {
         } else {
             callScore().gameWonO();
             currentWinnerScore = callScore().OWins();
+        }
+        return currentWinnerScore;
+    }
+
+    public int getLoserScore(Integer player) {
+        int currentWinnerScore;
+        if (player == 1) {
+            currentWinnerScore = callScore().OWins();
+        } else {
+            currentWinnerScore = callScore().XWins();
         }
         return currentWinnerScore;
     }
