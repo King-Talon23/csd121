@@ -24,7 +24,7 @@ public class Console {
 
         while (true) {
             println("Player " + currentPlayer + ": Please Select a Square: ");
-            String input = scanner.nextLine().replaceAll(" ", "").toUpperCase();
+            String input = scanner.nextLine().replaceAll(" ", "");
 
             try {
                 Coordinates coord = Coordinates.valueOf(input);
