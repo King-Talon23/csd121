@@ -14,6 +14,7 @@ public enum Coordinates {
     public String getLabel()
     {
         return label;
-    }}
+    }
+}
 
 

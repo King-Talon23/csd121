@@ -2,6 +2,7 @@ package lab3.ui;
 
 import lab3.game.Board;
 import lab3.game.Coordinates;
+
 import java.util.Scanner;
 
 public class Console {
@@ -15,16 +16,35 @@ public class Console {
     public void displayBoard() {
         System.out.println(board);
     }
+
     public static void println(String message) {
         System.out.println(message);
     }
 
+
+    //new stuff ------------------------------------------------------
+    public static void displayWin(Integer player, Integer winScore) {
+        String displayName;
+        if (player == 1) {
+            displayName = "ONE";
+        } else {
+            displayName = "TWO";
+        }
+        println("PLAYER " + displayName + " HAS WON");
+        println("PLAYER " + displayName + "S SCORE IS " + winScore);
+
+    }
+
+    public static void displayTie() {
+        println("TIE GAME!!!");
+    }
+    //---------------------
     public void move() {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
             println("Player " + currentPlayer + ": Please Select a Square: ");
-            String input = scanner.nextLine().replaceAll(" ", "");
+            String input = scanner.nextLine().replaceAll(" ", "").toUpperCase();
 
             try {
                 Coordinates coord = Coordinates.valueOf(input);

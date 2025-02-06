@@ -2,34 +2,49 @@ package lab3.game;
 
 import java.util.*;
 
+import static lab3.game.winRecord.callScore;
+
 public class Board {
     private final Map<Coordinates, String> tileMap = new HashMap<>();
     private final List<Coordinates> availableCoords = new ArrayList<>();
 
-    private static final List<winCondition> winConditions = List.of(
-            new winCondition(Coordinates.A1, Coordinates.A2, Coordinates.A3),
-            new winCondition(Coordinates.B1, Coordinates.B2, Coordinates.B3),
-            new winCondition(Coordinates.C1, Coordinates.C2, Coordinates.C3),
-            new winCondition(Coordinates.A1, Coordinates.B1, Coordinates.C1),
-            new winCondition(Coordinates.A2, Coordinates.B2, Coordinates.C2),
-            new winCondition(Coordinates.A3, Coordinates.B3, Coordinates.C3),
-            new winCondition(Coordinates.A1, Coordinates.B2, Coordinates.C3),
-            new winCondition(Coordinates.A3, Coordinates.B2, Coordinates.C1)
+    private static final List<lab3.game.winConditions> winConditions = List.of(
+            new winConditions(Coordinates.A1, Coordinates.A2, Coordinates.A3),
+            new winConditions(Coordinates.B1, Coordinates.B2, Coordinates.B3),
+            new winConditions(Coordinates.C1, Coordinates.C2, Coordinates.C3),
+            new winConditions(Coordinates.A1, Coordinates.B1, Coordinates.C1),
+            new winConditions(Coordinates.A2, Coordinates.B2, Coordinates.C2),
+            new winConditions(Coordinates.A3, Coordinates.B3, Coordinates.C3),
+            new winConditions(Coordinates.A1, Coordinates.B2, Coordinates.C3),
+            new winConditions(Coordinates.A3, Coordinates.B2, Coordinates.C1)
     );
 
-    public Board() {
+    private static final winRecord winRecord = new winRecord(0, 0);
 
+    public Board() {
         for (Coordinates coord : Coordinates.values()) {
 
             tileMap.put(coord, " ");
             availableCoords.add(coord);
         }
     }
-
+//new stuff------------------------
+    public int getWinScore(Integer player) {
+        int currentWinnerScore;
+        if (player == 1) {
+            callScore().incrementXWins();
+            currentWinnerScore = callScore().XWins();
+        } else {
+            callScore().incrementOWins();
+            currentWinnerScore = callScore().OWins();
+        }
+        return currentWinnerScore;
+    }
+//--------------------------------
 
     public boolean checkWin() {
 
-        for (winCondition wc : winConditions) {
+        for (lab3.game.winConditions wc : winConditions) {
 
             Coordinates cond1 = wc.coord1();
             Coordinates cond2 = wc.coord2();
@@ -47,6 +62,7 @@ public class Board {
     // Check if the game is a tie
     public boolean isTie() {
         return availableCoords.isEmpty();
+        // no need to check for win since ties are checked for after wins
     }
 
     //Prompt a move on the board

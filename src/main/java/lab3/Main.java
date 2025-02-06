@@ -15,15 +15,15 @@ public class Main {
 
 
             if (board.checkWin()) {
-
                 game.displayBoard();
-                System.out.println("PLAYER " + game.getCurrentPlayer() + " HAS WON!");
+                Console.displayWin(game.getCurrentPlayer(), board.getWinScore(game.getCurrentPlayer()));
+
                 break;
             }
 
             if (board.isTie()) {
                 game.displayBoard();
-                System.out.println("Tie Game!");
+                Console.displayTie();
                 break;
             }
 
