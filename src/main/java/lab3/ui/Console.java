@@ -54,13 +54,7 @@ public class Console {
                     if (!playerO.equals("y") && !playerO.equals("n")) {
                         println("please enter Y or N to continue.");
                     } else {
-                        if (playerX.equals("y") && playerO.equals("y")) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
-
+                        return playerX.equals("y") && playerO.equals("y");
                     }
                 }
             }
