@@ -16,7 +16,9 @@ public class Main {
 
             if (board.checkWin()) {
                 game.displayBoard();
-                Console.displayWin(game.getCurrentPlayer(), board.getWinScore(game.getCurrentPlayer()));
+                Console.displayWin(game.getCurrentPlayer(),
+                        board.getWinnerScore(game.getCurrentPlayer()), board.getLoserScore(game.getCurrentPlayer()));
+
                 if (game.rematch()) {
                     Board.resetGame();
                     game.resetPlayers(game.getCurrentPlayer());
@@ -29,6 +31,7 @@ public class Main {
             if (board.isTie()) {
                 game.displayBoard();
                 Console.displayTie();
+
                 if (game.rematch()) {
                     Board.resetGame();
                     game.resetPlayers(game.getCurrentPlayer());

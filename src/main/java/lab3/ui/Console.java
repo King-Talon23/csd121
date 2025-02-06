@@ -23,16 +23,18 @@ public class Console {
 
 
     //new stuff ------------------------------------------------------
-    public static void displayWin(Integer player, Integer winScore) {
-        String displayName;
+    public static void displayWin(Integer player, Integer winnerScore, Integer loserScore) {
+        String winnerName;
+        String loserName;
         if (player == 1) {
-            displayName = "ONE";
+            winnerName = "X";
+            loserName = "O";
         } else {
-            displayName = "TWO";
+            winnerName = "O";
+            loserName = "O";
         }
-        println("PLAYER " + displayName + " HAS WON");
-        println("PLAYER " + displayName + "S SCORE IS " + winScore);
-
+        println("PLAYER " + winnerName + " HAS WON");
+        println(String.format("THE SCORE IS NOW %s (%s) VS %s (%s)", winnerScore, winnerName, loserScore, loserName));
     }
 
     public static void displayTie() {
