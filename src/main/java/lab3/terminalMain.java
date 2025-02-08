@@ -1,13 +1,15 @@
 package lab3;
 
 import lab3.game.Board;
-import lab3.ui.Console;
+import lab3.ui.terminalConsole;
 
-public class Main {
+import static lab3.game.winRecord.callScore;
+
+public class terminalMain {
     public static void main(String[] args) {
 
         Board board = new Board();
-        Console game = new Console(board);
+        terminalConsole game = new terminalConsole(board);
 
         while (true) {
             game.displayBoard();
@@ -16,9 +18,7 @@ public class Main {
 
             if (board.checkWin()) {
                 game.displayBoard();
-                Console.displayWin(game.getCurrentPlayer(),
-                        board.getWinnerScore(game.getCurrentPlayer()), board.getLoserScore(game.getCurrentPlayer()));
-
+                terminalConsole.displayWin(game.getCurrentPlayer());
                 if (game.rematch()) {
                     Board.resetGame();
                     game.resetPlayers(game.getCurrentPlayer());
@@ -27,10 +27,9 @@ public class Main {
                     break;
                 }
             }
-
             if (board.isTie()) {
                 game.displayBoard();
-                Console.displayTie();
+                terminalConsole.displayTie();
 
                 if (game.rematch()) {
                     Board.resetGame();
@@ -46,3 +45,5 @@ public class Main {
         }
     }
 }
+
+
