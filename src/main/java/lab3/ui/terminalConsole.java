@@ -5,11 +5,13 @@ import lab3.game.Coordinates;
 
 import java.util.Scanner;
 
-public class Console {
+import static lab3.game.winRecord.callScore;
+
+public class terminalConsole {
     private final Board board;
     private int currentPlayer = 1;
 
-    public Console(Board board) {
+    public terminalConsole(Board board) {
         this.board = board;
     }
 
@@ -22,23 +24,20 @@ public class Console {
     }
 
 
-    //new stuff ------------------------------------------------------
-    public static void displayWin(Integer player, Integer winnerScore, Integer loserScore) {
+    public static void displayWin(Integer winningPlayer) {
         String winnerName;
-        String loserName;
-        if (player == 1) {
+        if (winningPlayer == 1) {
             winnerName = "X";
-            loserName = "O";
         } else {
             winnerName = "O";
-            loserName = "O";
         }
         println("PLAYER " + winnerName + " HAS WON");
-        println(String.format("THE SCORE IS NOW %s (%s) VS %s (%s)", winnerScore, winnerName, loserScore, loserName));
+        println(String.format("THE SCORE IS NOW %s (X) VS %s (O)", callScore().XWins(), callScore().OWins()));
     }
 
     public static void displayTie() {
-        println("TIE GAME!!!");
+        println("TIE GAME, NO ONE WINS!");
+        println(String.format("THE SCORE REMAINS %s (X) VS %s (O)", callScore().XWins(), callScore().OWins()));
     }
 
     public boolean rematch() {
@@ -96,6 +95,5 @@ public class Console {
     public int getCurrentPlayer() {
         return currentPlayer;
     }
-
 
 }
