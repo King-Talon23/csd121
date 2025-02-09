@@ -6,7 +6,8 @@ import lab3.game.Coordinates;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.util.Scanner;
+import java.util.Objects;
+
 
 import static lab3.game.winRecord.callScore;
 
@@ -15,6 +16,8 @@ public class swingConsole {
     private int currentPlayer = 1;
     private static JFrame window;
     private static JLabel mainText;
+    private static JButton a1;
+    private static JButton a3;
 
     public swingConsole(Board board) {
         this.board = board;
@@ -32,52 +35,44 @@ public class swingConsole {
     }
 
     public void createWindow() {
-        window = new JFrame("Tic-Tac-Toe Simulator 3000");
+        window = new JFrame("Tic-Tac-Toe-inator 3000");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setSize(300, 200);
+        window.setExtendedState(JFrame.MAXIMIZED_BOTH); // this is what makes is maximize on start
+        window.setSize(500, 600);
 
         JPanel buttonPanel = getButtonJPanel();
         JPanel textPanel = getTextJLabel();
 
-
         window.add(buttonPanel, BorderLayout.CENTER);
         window.add(textPanel, BorderLayout.SOUTH);
-
 
         window.setVisible(true);
     }
 
     private void handleButtonPress(JButton button, String coordName) {
-        try {
-            Coordinates coord = Coordinates.valueOf(coordName);
-            String playerSymbol = (currentPlayer == 1 ? "X" : "O");
-
-            if (board.setMove(coord, playerSymbol)) {
-                swapButtonWithLabel(button, playerSymbol);
-            } else {
-                printToUI("Tile not available. Please enter new coordinates.");
-            }
-        } catch (IllegalArgumentException e) {
-            printToUI("Invalid coordinate. Please enter a valid move (e.g., A1, B2, C3).");
-        }
+        String playerSymbol = (currentPlayer == 1 ? "X" : "O");
+        swapButtonWithLabel(button, playerSymbol);
         switchPlayer();
     }
 
     private static void swapButtonWithLabel(JButton button, String text) {
         JPanel parent = (JPanel) button.getParent();
-        parent.remove(button);
 
-        JLabel label = new JLabel(text, SwingConstants.CENTER);
-        parent.add(label);
-
-        parent.revalidate();
-        parent.repaint();
+            // Get the index of the button to remember where to put it
+            int index = parent.getComponentZOrder(button);
+            parent.remove(button);
+            JLabel label = new JLabel(text, SwingConstants.CENTER);
+            // put the label back at the same place of the button
+            parent.add(label, index);
+            parent.revalidate();
+            parent.repaint();
     }
+
 
     public JPanel getButtonJPanel() {
         JPanel buttonPanel = new JPanel(new GridLayout(3, 3));
         JButton a1 = new JButton("");
-        a1.setBorder(new LineBorder(Color.BLACK));
+        a1.setBorder(new LineBorder(Color.BLACK)); // button outline
         JButton a2 = new JButton("");
         a2.setBorder(new LineBorder(Color.BLACK));
         JButton a3 = new JButton("");
@@ -98,9 +93,26 @@ public class swingConsole {
         c3.setBorder(new LineBorder(Color.BLACK));
 
 
-        a1.addActionListener(_ -> handleButtonPress(a1, "a1"));
+        a1.addActionListener(_ -> {
+            // rematch function
+            if (Objects.equals(a1.getText(), "Y")) {
+                getRematchInput("Y");
+
+            } else {
+                // main button function
+                handleButtonPress(a1, "a1");
+            }
+        });
+
         a2.addActionListener(_ -> handleButtonPress(a2, "a2"));
-        a3.addActionListener(_ -> handleButtonPress(a3, "a3"));
+
+        a3.addActionListener(_ -> {
+            if (Objects.equals(a3.getText(), "N")) {
+                getRematchInput("N");
+            } else {
+                handleButtonPress(a3, "a1");
+            }
+        });
 
         b1.addActionListener(_ -> handleButtonPress(b1, "b1"));
         b2.addActionListener(_ -> handleButtonPress(b2, "b2"));
@@ -144,53 +156,28 @@ public class swingConsole {
     }
 
 
+    public void setRematch() {
+        a1.setText("Y");
+        a3.setText("N");
+        printToUI("Do both players wish to play again? (Y)es (N)o");
+    }
 
-    public boolean rematch() {
-        Scanner scanner = new Scanner(System.in);
-        printToUI("Do both players wish to play again? (y/n)");
-        while (true) {
-            printToUI("Player X?");
-            String playerX = scanner.nextLine().replaceAll(" ", "").toLowerCase();
-            if (!playerX.equals("y") && !playerX.equals("n")) {
-                printToUI("please enter Y or N to continue.");
-            } else {
-                while (true) {
-                    printToUI("Player O?");
-                    String playerO = scanner.nextLine().replaceAll(" ", "").toLowerCase();
-                    if (!playerO.equals("y") && !playerO.equals("n")) {
-                        printToUI("please enter Y or N to continue.");
-                    } else {
-                        return playerX.equals("y") && playerO.equals("y");
-                    }
-                }
+    public void getRematchInput(String playerResponse) {
+        if (Objects.equals(playerResponse, "Y")) {
+
+        } else {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
+            closeGame();
         }
     }
 
     public void resetPlayers(Integer player) {
         if (player != 1) {
             currentPlayer = 1;
-        }
-    }
-
-    //---------------------
-    public void move() {
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            printToUI("Player " + currentPlayer + ": Please Select a Square: ");
-            String input = scanner.nextLine().replaceAll(" ", "").toUpperCase();
-
-            try {
-                Coordinates coord = Coordinates.valueOf(input);
-                if (board.setMove(coord, currentPlayer == 1 ? "X" : "O")) {
-                    return;
-                } else {
-                    printToUI("Tile not available. Please enter new coordinates.");
-                }
-            } catch (IllegalArgumentException e) {
-                printToUI("Invalid coordinate. Please enter a valid move (e.g., A1, B2, C3).");
-            }
         }
     }
 

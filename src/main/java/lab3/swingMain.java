@@ -13,37 +13,31 @@ public class swingMain {
         game.createWindow();
 
         while (true) {
-            game.move();
-
 
             if (board.checkWin()) {
                 swingConsole.displayWin(game.getCurrentPlayer());
-                if (game.rematch()) {
-                    Board.resetGame();
-                    game.resetPlayers(game.getCurrentPlayer());
-                    continue;
-                } else {
-                    break;
-                }
+                game.setRematch();
+                Board.resetGame();
+                game.resetPlayers(game.getCurrentPlayer());
+                break;
             }
 
             if (board.isTie()) {
                 swingConsole.displayTie();
-
-                if (game.rematch()) {
-                    Board.resetGame();
-                    game.resetPlayers(game.getCurrentPlayer());
-                    continue;
-                } else {
-                    break;
-                }
+                game.setRematch();
+                Board.resetGame();
+                game.resetPlayers(game.getCurrentPlayer());
+                break;
             }
 
             game.switchPlayer();
-
         }
-
     }
+
 }
+
+
+
+
 
 
