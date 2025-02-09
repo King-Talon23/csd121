@@ -6,22 +6,21 @@ import lab3.game.Coordinates;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.util.Objects;
 
 
 import static lab3.game.winRecord.callScore;
 
 public class swingConsole {
-    private final Board board;
+    private static Board board = new Board();
     private static int currentPlayer = 1;
     private static JFrame window;
     private static JLabel mainText;
-    public static Integer rematchCounter = 0;
-    private static JButton a1;
-    private static JButton a3;
+    private static final JPanel buttonPanel = new JPanel();
+    public static Integer rematch = 0; // 0 = placeholder, 1 = rematch, 2 = game end
+    private static final Font labelFont = new Font("Ariel", Font.PLAIN, 200);
 
     public swingConsole(Board board) {
-        this.board = board;
+        swingConsole.board = board;
     }
 
     public static void printToUI(String message) {
@@ -41,7 +40,7 @@ public class swingConsole {
         window.setExtendedState(JFrame.MAXIMIZED_BOTH); // this is what makes it maximize on start
         window.setSize(500, 600);
 
-        JPanel buttonPanel = getButtonJPanel();
+        fillButtonPanel();
         JPanel textPanel = getTextJLabel();
 
         window.add(buttonPanel, BorderLayout.CENTER);
@@ -50,20 +49,78 @@ public class swingConsole {
         window.setVisible(true);
     }
 
-    private void handleButtonPress(JButton button, String coordName) {
+    public static void clearPanel() {
+        buttonPanel.removeAll();
+        buttonPanel.revalidate();
+        buttonPanel.repaint();
+    }
+
+    public static void displayWin() {
+        printToUI("PLAYER " + lastPlayerSymbol() + " HAS WON " +
+                String.format("THE SCORE IS NOW %s (X) VS %s (O)", callScore().XWins(), callScore().OWins()));
+        sleep(1500);
+    }
+
+    public static void displayTie() {
+        printToUI("TIE GAME, NO ONE WINS! " +
+                String.format("THE SCORE REMAINS %s (X) VS %s (O)", callScore().XWins(), callScore().OWins()));
+        sleep(1500);
+    }
+
+    public void closeGame() {
+        window.dispose();
+    }
+
+    public static void resetPanel() {
+        clearPanel();
+        currentPlayer = 1;
+        fillButtonPanel();
+        printToUI("");
+        rematch = 0;
+    }
+
+    public void setRematch() {
+        clearPanel();
+        printToUI("Do both players wish to play again?");
+        buttonPanel.setLayout(new GridLayout(1, 2));
+        JButton yes = new JButton("");
+        yes.setBorder(new LineBorder(Color.BLACK));
+        yes.addActionListener(e -> rematch = 1);
+        yes.setText("Yes");
+
+        JButton no = new JButton("");
+        no.setBorder(new LineBorder(Color.BLACK));
+        no.addActionListener(e -> rematch = 2);
+        no.setText("No");
+
+        buttonPanel.add(yes);
+        buttonPanel.add(no);
+        buttonPanel.revalidate();
+        buttonPanel.repaint();
+    }
+
+    private static JButton createTileButton(String name) {
+        JButton button = new JButton("");
+        button.setBorder(new LineBorder(Color.BLACK));
+        button.addActionListener(e -> handleButtonPress(button, name));
+        return button;
+    }
+
+    public static void handleButtonPress(JButton button, String coordName) {
         swapButtonWithLabel(button, currentPlayerSymbol());
         Coordinates coord = Coordinates.valueOf(coordName);
         board.setMove(coord, currentPlayerSymbol());
         currentPlayer = (currentPlayer == 1) ? 2 : 1;
     }
 
-    private static void swapButtonWithLabel(JButton button, String text) {
+    public static void swapButtonWithLabel(JButton button, String text) {
         JPanel parent = (JPanel) button.getParent();
 
-        // Get the index of the button to remember where to put it
+        // Get the index of the button to remember where to put label
         int index = parent.getComponentZOrder(button);
         parent.remove(button);
         JLabel label = new JLabel(text, SwingConstants.CENTER);
+        label.setFont(labelFont);
         // put the label back at the same place of the button
         parent.add(label, index);
         parent.revalidate();
@@ -71,58 +128,17 @@ public class swingConsole {
     }
 
 
-    public JPanel getButtonJPanel() {
-        JPanel buttonPanel = new JPanel(new GridLayout(3, 3));
-        JButton a1 = new JButton("");
-        a1.setBorder(new LineBorder(Color.BLACK)); // button outline
-        JButton a2 = new JButton("");
-        a2.setBorder(new LineBorder(Color.BLACK));
-        JButton a3 = new JButton("");
-        a3.setBorder(new LineBorder(Color.BLACK));
-
-        JButton b1 = new JButton("");
-        b1.setBorder(new LineBorder(Color.BLACK));
-        JButton b2 = new JButton("");
-        b2.setBorder(new LineBorder(Color.BLACK));
-        JButton b3 = new JButton("");
-        b3.setBorder(new LineBorder(Color.BLACK));
-
-        JButton c1 = new JButton("");
-        c1.setBorder(new LineBorder(Color.BLACK));
-        JButton c2 = new JButton("");
-        c2.setBorder(new LineBorder(Color.BLACK));
-        JButton c3 = new JButton("");
-        c3.setBorder(new LineBorder(Color.BLACK));
-
-
-        a1.addActionListener(_ -> {
-            // rematch function
-            if (Objects.equals(a1.getText(), "Y")) {
-                getRematchInput("Y");
-
-            } else {
-                // main button function
-                handleButtonPress(a1, "A1");
-            }
-        });
-
-        a2.addActionListener(_ -> handleButtonPress(a2, "A2"));
-
-        a3.addActionListener(_ -> {
-            if (Objects.equals(a3.getText(), "N")) {
-                getRematchInput("N");
-            } else {
-                handleButtonPress(a3, "A3");
-            }
-        });
-
-        b1.addActionListener(_ -> handleButtonPress(b1, "B1"));
-        b2.addActionListener(_ -> handleButtonPress(b2, "B2"));
-        b3.addActionListener(_ -> handleButtonPress(b3, "B3"));
-
-        c1.addActionListener(_ -> handleButtonPress(c1, "C1"));
-        c2.addActionListener(_ -> handleButtonPress(c2, "C2"));
-        c3.addActionListener(_ -> handleButtonPress(c3, "C3"));
+    public static void fillButtonPanel() {
+        buttonPanel.setLayout(new GridLayout(3, 3));
+        JButton a1 = createTileButton("A1");
+        JButton a2 = createTileButton("A2");
+        JButton a3 = createTileButton("A3");
+        JButton b1 = createTileButton("B1");
+        JButton b2 = createTileButton("B2");
+        JButton b3 = createTileButton("B3");
+        JButton c1 = createTileButton("C1");
+        JButton c2 = createTileButton("C2");
+        JButton c3 = createTileButton("C3");
 
         buttonPanel.add(a1);
         buttonPanel.add(a2);
@@ -133,60 +149,23 @@ public class swingConsole {
         buttonPanel.add(c1);
         buttonPanel.add(c2);
         buttonPanel.add(c3);
-        return buttonPanel;
-    }
-
-
-    public static void displayWin() {
-        printToUI("PLAYER " + lastPlayerSymbol() + " HAS WON " +
-        String.format("THE SCORE IS NOW %s (X) VS %s (O)", callScore().XWins(), callScore().OWins()));
-    }
-
-    public static void displayTie() {
-        printToUI("TIE GAME, NO ONE WINS! " +
-        String.format("THE SCORE REMAINS %s (X) VS %s (O)", callScore().XWins(), callScore().OWins()));
-    }
-
-    public void closeGame() {
-        window.dispose();
-    }
-
-    public void setRematch() {
-        a1.setText("Y");
-        a3.setText("N");
-        printToUI("Do both players wish to play again? (Y)es (N)o");
-    }
-
-    public void getRematchInput(String playerResponse) {
-        if (Objects.equals(playerResponse, "Y")) {
-            rematchCounter += 1;
-            if (rematchCounter == 2) {
-                // reset game
-            }
-        } else {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            closeGame();
-        }
-    }
-
-    public void resetPlayers() {
-        currentPlayer = 1;
     }
 
     public static String currentPlayerSymbol() {
         return currentPlayer == 1 ? "X" : "O";
     }
 
-    /*
-    because players have to be switched on button press and not in the main
-    The game always thinks the NEXT player has won, since wins are checked after the players are switched
-     */
     public static String lastPlayerSymbol() {
+        //since the player value it switched on button press we need the last player value for the winner
         return currentPlayer == 1 ? "O" : "X";
+    }
+
+    public static void sleep(Integer milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

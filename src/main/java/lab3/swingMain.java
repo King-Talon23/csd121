@@ -12,27 +12,44 @@ public class swingMain {
         swingConsole game = new swingConsole(board);
         game.createWindow();
 
-        while (true) {
+        boolean gameRunning = true;
 
+        while (gameRunning) {
             if (board.checkWin()) {
                 Board.addPoints(swingConsole.lastPlayerSymbol());
                 swingConsole.displayWin();
                 game.setRematch();
-                Board.resetGame();
-                game.resetPlayers();
-                break;
-            }
 
-            if (board.isTie()) {
+
+                while (swingConsole.rematch == 0) {
+                    swingConsole.sleep(1);
+                }
+
+                if (swingConsole.rematch == 1) {
+                    Board.resetGame();
+                    swingConsole.resetPanel();
+                } else if (swingConsole.rematch == 2) {
+                    gameRunning = false;
+                }
+            } else if (board.isTie()) {
                 swingConsole.displayTie();
-                game.setRematch();
                 Board.resetGame();
-                game.resetPlayers();
-                break;
+                game.setRematch();
+
+                while (swingConsole.rematch == 0) {
+                    swingConsole.sleep(1);
+                }
+
+                if (swingConsole.rematch == 1) {
+                    Board.resetGame();
+                    swingConsole.resetPanel();
+                } else if (swingConsole.rematch == 2) {
+                    gameRunning = false;
+                }
             }
         }
+        game.closeGame();
     }
-
 }
 
 
