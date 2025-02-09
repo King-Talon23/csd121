@@ -9,7 +9,7 @@ import static lab3.game.winRecord.callScore;
 
 public class terminalConsole {
     private final Board board;
-    private int currentPlayer = 1;
+    private static int currentPlayer = 1;
 
     public terminalConsole(Board board) {
         this.board = board;
@@ -24,14 +24,8 @@ public class terminalConsole {
     }
 
 
-    public static void displayWin(Integer winningPlayer) {
-        String winnerName;
-        if (winningPlayer == 1) {
-            winnerName = "X";
-        } else {
-            winnerName = "O";
-        }
-        println("PLAYER " + winnerName + " HAS WON");
+    public static void displayWin() {
+        println("PLAYER " + currentPlayerSymbol() + " HAS WON");
         println(String.format("THE SCORE IS NOW %s (X) VS %s (O)", callScore().XWins(), callScore().OWins()));
     }
 
@@ -62,22 +56,16 @@ public class terminalConsole {
         }
     }
 
-    public void resetPlayers(Integer player) {
-        if (player != 1) {
-            currentPlayer = 1;
-        }
-    }
-    //---------------------
     public void move() {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            println("Player " + currentPlayer + ": Please Select a Square: ");
+            println("Player " + currentPlayerSymbol() + ": Please Select a Square: ");
             String input = scanner.nextLine().replaceAll(" ", "").toUpperCase();
 
             try {
                 Coordinates coord = Coordinates.valueOf(input);
-                if (board.setMove(coord, currentPlayer == 1 ? "X" : "O")) {
+                if (board.setMove(coord, currentPlayerSymbol())) {
                     return;
                 } else {
                     println("Tile not available. Please enter new coordinates.");
@@ -88,12 +76,16 @@ public class terminalConsole {
         }
     }
 
+    public void resetPlayers() {
+        currentPlayer = 1;
+    }
+
     public void switchPlayer() {
         currentPlayer = (currentPlayer == 1) ? 2 : 1;
     }
 
-    public int getCurrentPlayer() {
-        return currentPlayer;
+    public static String currentPlayerSymbol() {
+        return currentPlayer == 1 ? "X" : "O";
     }
 
 }

@@ -15,10 +15,11 @@ public class swingMain {
         while (true) {
 
             if (board.checkWin()) {
-                swingConsole.displayWin(game.getCurrentPlayer());
+                Board.addPoints(swingConsole.lastPlayerSymbol());
+                swingConsole.displayWin();
                 game.setRematch();
                 Board.resetGame();
-                game.resetPlayers(game.getCurrentPlayer());
+                game.resetPlayers();
                 break;
             }
 
@@ -26,11 +27,9 @@ public class swingMain {
                 swingConsole.displayTie();
                 game.setRematch();
                 Board.resetGame();
-                game.resetPlayers(game.getCurrentPlayer());
+                game.resetPlayers();
                 break;
             }
-
-            game.switchPlayer();
         }
     }
 

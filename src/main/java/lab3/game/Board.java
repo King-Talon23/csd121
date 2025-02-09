@@ -30,27 +30,13 @@ public class Board {
             availableCoords.add(coord);
         }
     }
-//new stuff------------------------
-    public int getWinnerScore(Integer player) {
-        int currentWinnerScore;
-        if (player == 1) {
-            callScore().gameWonX(); // increase score
-            currentWinnerScore = callScore().XWins();
+
+    public static void addPoints(String player) {
+        if (Objects.equals(player, "X")) {
+            callScore().gameWonX();
         } else {
             callScore().gameWonO();
-            currentWinnerScore = callScore().OWins();
         }
-        return currentWinnerScore;
-    }
-
-    public int getLoserScore(Integer player) {
-        int currentWinnerScore;
-        if (player == 1) {
-            currentWinnerScore = callScore().OWins();
-        } else {
-            currentWinnerScore = callScore().XWins();
-        }
-        return currentWinnerScore;
     }
 
     public static void resetGame() {
@@ -62,7 +48,6 @@ public class Board {
             availableCoords.add(coord);
         }
     }
-//--------------------------------
 
     public boolean checkWin() {
 

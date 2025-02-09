@@ -3,7 +3,6 @@ package lab3;
 import lab3.game.Board;
 import lab3.ui.terminalConsole;
 
-import static lab3.game.winRecord.callScore;
 
 public class terminalMain {
     public static void main(String[] args) {
@@ -17,11 +16,12 @@ public class terminalMain {
 
 
             if (board.checkWin()) {
+                Board.addPoints(terminalConsole.currentPlayerSymbol());
                 game.displayBoard();
-                terminalConsole.displayWin(game.getCurrentPlayer());
+                terminalConsole.displayWin();
                 if (game.rematch()) {
                     Board.resetGame();
-                    game.resetPlayers(game.getCurrentPlayer());
+                    game.resetPlayers();
                     continue;
                 } else {
                     break;
@@ -33,7 +33,7 @@ public class terminalMain {
 
                 if (game.rematch()) {
                     Board.resetGame();
-                    game.resetPlayers(game.getCurrentPlayer());
+                    game.resetPlayers();
                     continue;
                 } else {
                     break;

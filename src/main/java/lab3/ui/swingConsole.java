@@ -13,9 +13,10 @@ import static lab3.game.winRecord.callScore;
 
 public class swingConsole {
     private final Board board;
-    private int currentPlayer = 1;
+    private static int currentPlayer = 1;
     private static JFrame window;
     private static JLabel mainText;
+    public static Integer rematchCounter = 0;
     private static JButton a1;
     private static JButton a3;
 
@@ -37,7 +38,7 @@ public class swingConsole {
     public void createWindow() {
         window = new JFrame("Tic-Tac-Toe-inator 3000");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setExtendedState(JFrame.MAXIMIZED_BOTH); // this is what makes is maximize on start
+        window.setExtendedState(JFrame.MAXIMIZED_BOTH); // this is what makes it maximize on start
         window.setSize(500, 600);
 
         JPanel buttonPanel = getButtonJPanel();
@@ -50,22 +51,23 @@ public class swingConsole {
     }
 
     private void handleButtonPress(JButton button, String coordName) {
-        String playerSymbol = (currentPlayer == 1 ? "X" : "O");
-        swapButtonWithLabel(button, playerSymbol);
-        switchPlayer();
+        swapButtonWithLabel(button, currentPlayerSymbol());
+        Coordinates coord = Coordinates.valueOf(coordName);
+        board.setMove(coord, currentPlayerSymbol());
+        currentPlayer = (currentPlayer == 1) ? 2 : 1;
     }
 
     private static void swapButtonWithLabel(JButton button, String text) {
         JPanel parent = (JPanel) button.getParent();
 
-            // Get the index of the button to remember where to put it
-            int index = parent.getComponentZOrder(button);
-            parent.remove(button);
-            JLabel label = new JLabel(text, SwingConstants.CENTER);
-            // put the label back at the same place of the button
-            parent.add(label, index);
-            parent.revalidate();
-            parent.repaint();
+        // Get the index of the button to remember where to put it
+        int index = parent.getComponentZOrder(button);
+        parent.remove(button);
+        JLabel label = new JLabel(text, SwingConstants.CENTER);
+        // put the label back at the same place of the button
+        parent.add(label, index);
+        parent.revalidate();
+        parent.repaint();
     }
 
 
@@ -100,27 +102,27 @@ public class swingConsole {
 
             } else {
                 // main button function
-                handleButtonPress(a1, "a1");
+                handleButtonPress(a1, "A1");
             }
         });
 
-        a2.addActionListener(_ -> handleButtonPress(a2, "a2"));
+        a2.addActionListener(_ -> handleButtonPress(a2, "A2"));
 
         a3.addActionListener(_ -> {
             if (Objects.equals(a3.getText(), "N")) {
                 getRematchInput("N");
             } else {
-                handleButtonPress(a3, "a1");
+                handleButtonPress(a3, "A3");
             }
         });
 
-        b1.addActionListener(_ -> handleButtonPress(b1, "b1"));
-        b2.addActionListener(_ -> handleButtonPress(b2, "b2"));
-        b3.addActionListener(_ -> handleButtonPress(b3, "b3"));
+        b1.addActionListener(_ -> handleButtonPress(b1, "B1"));
+        b2.addActionListener(_ -> handleButtonPress(b2, "B2"));
+        b3.addActionListener(_ -> handleButtonPress(b3, "B3"));
 
-        c1.addActionListener(_ -> handleButtonPress(c1, "c1"));
-        c2.addActionListener(_ -> handleButtonPress(c2, "c2"));
-        c3.addActionListener(_ -> handleButtonPress(c3, "c3"));
+        c1.addActionListener(_ -> handleButtonPress(c1, "C1"));
+        c2.addActionListener(_ -> handleButtonPress(c2, "C2"));
+        c3.addActionListener(_ -> handleButtonPress(c3, "C3"));
 
         buttonPanel.add(a1);
         buttonPanel.add(a2);
@@ -135,26 +137,19 @@ public class swingConsole {
     }
 
 
-    public static void displayWin(Integer winningPlayer) {
-        String winnerName;
-        if (winningPlayer == 1) {
-            winnerName = "X";
-        } else {
-            winnerName = "O";
-        }
-        printToUI("PLAYER " + winnerName + " HAS WON");
-        printToUI(String.format("THE SCORE IS NOW %s (X) VS %s (O)", callScore().XWins(), callScore().OWins()));
+    public static void displayWin() {
+        printToUI("PLAYER " + lastPlayerSymbol() + " HAS WON " +
+        String.format("THE SCORE IS NOW %s (X) VS %s (O)", callScore().XWins(), callScore().OWins()));
     }
 
     public static void displayTie() {
-        printToUI("TIE GAME, NO ONE WINS!");
-        printToUI(String.format("THE SCORE REMAINS %s (X) VS %s (O)", callScore().XWins(), callScore().OWins()));
+        printToUI("TIE GAME, NO ONE WINS! " +
+        String.format("THE SCORE REMAINS %s (X) VS %s (O)", callScore().XWins(), callScore().OWins()));
     }
 
     public void closeGame() {
         window.dispose();
     }
-
 
     public void setRematch() {
         a1.setText("Y");
@@ -164,7 +159,10 @@ public class swingConsole {
 
     public void getRematchInput(String playerResponse) {
         if (Objects.equals(playerResponse, "Y")) {
-
+            rematchCounter += 1;
+            if (rematchCounter == 2) {
+                // reset game
+            }
         } else {
             try {
                 Thread.sleep(500);
@@ -175,19 +173,20 @@ public class swingConsole {
         }
     }
 
-    public void resetPlayers(Integer player) {
-        if (player != 1) {
-            currentPlayer = 1;
-        }
+    public void resetPlayers() {
+        currentPlayer = 1;
     }
 
-    public void switchPlayer() {
-        currentPlayer = (currentPlayer == 1) ? 2 : 1;
+    public static String currentPlayerSymbol() {
+        return currentPlayer == 1 ? "X" : "O";
     }
 
-    public int getCurrentPlayer() {
-        return currentPlayer;
+    /*
+    because players have to be switched on button press and not in the main
+    The game always thinks the NEXT player has won, since wins are checked after the players are switched
+     */
+    public static String lastPlayerSymbol() {
+        return currentPlayer == 1 ? "O" : "X";
     }
-
 
 }
