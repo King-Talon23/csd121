@@ -8,11 +8,15 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 
 
+import static lab3.game.Board.currentPlayerSymbol;
 import static lab3.game.winRecord.callScore;
 
 public class swingConsole {
+    /**
+     * This is Not Fully-Functional
+     */
     private static Board board = new Board();
-    private static int currentPlayer = 1;
+    public static int currentPlayer = 1;
     private static JFrame window;
     private static JLabel mainText;
     private static final JPanel buttonPanel = new JPanel();
@@ -103,13 +107,14 @@ public class swingConsole {
         JButton button = new JButton("");
         button.setBorder(new LineBorder(Color.BLACK));
         button.addActionListener(e -> handleButtonPress(button, name));
+
         return button;
     }
 
     public static void handleButtonPress(JButton button, String coordName) {
         swapButtonWithLabel(button, currentPlayerSymbol());
         Coordinates coord = Coordinates.valueOf(coordName);
-        board.setMove(coord, currentPlayerSymbol());
+        board.setMove(coord);
         currentPlayer = (currentPlayer == 1) ? 2 : 1;
     }
 
@@ -149,10 +154,6 @@ public class swingConsole {
         buttonPanel.add(c1);
         buttonPanel.add(c2);
         buttonPanel.add(c3);
-    }
-
-    public static String currentPlayerSymbol() {
-        return currentPlayer == 1 ? "X" : "O";
     }
 
     public static String lastPlayerSymbol() {

@@ -1,5 +1,8 @@
 package lab3.game;
 
+/**
+ * Enum representing all possible coordinates on the board
+ */
 public enum Coordinates {
     A1("a1"), A2("a2"), A3("a3"),
     B1("b1"), B2("b2"), B3("b3"),

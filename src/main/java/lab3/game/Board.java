@@ -3,11 +3,16 @@ package lab3.game;
 import java.util.*;
 
 import static lab3.game.winRecord.callScore;
+import static lab3.ui.swingConsole.currentPlayer;
 
 public class Board {
     private static final Map<Coordinates, String> tileMap = new HashMap<>();
     private static final List<Coordinates> availableCoords = new ArrayList<>();
 
+
+    /**
+     * This class represents the board of a tic-tac-toe game
+     */
     private static final List<lab3.game.winConditions> winConditions = List.of(
             new winConditions(Coordinates.A1, Coordinates.A2, Coordinates.A3),
             new winConditions(Coordinates.B1, Coordinates.B2, Coordinates.B3),
@@ -23,6 +28,11 @@ public class Board {
         new winRecord(0, 0);
     }
 
+    /**
+     * Initializes a game board for tic-tac-toe
+     * Consists of a tileMap which holds info on what areas are taken up by each player.
+     * Also contains a list array that tracks each move available to be made
+     */
     public Board() {
         for (Coordinates coord : Coordinates.values()) {
 
@@ -31,6 +41,10 @@ public class Board {
         }
     }
 
+    /**
+     *Updates the score based on which player has won the most recent round
+     * @param player the player symbol of the player who won the round (either X or O)
+     */
     public static void addPoints(String player) {
         if (Objects.equals(player, "X")) {
             callScore().gameWonX();
@@ -39,6 +53,10 @@ public class Board {
         }
     }
 
+    /**
+     * Resets the game by clearing available coordinates and re-initializes the board
+     * All tiles are set to empty and all coordinates are marked as available again.
+     */
     public static void resetGame() {
         availableCoords.clear();
 
@@ -49,6 +67,11 @@ public class Board {
         }
     }
 
+    /**
+     * Checks if there is a winning condition on the board.
+     * Player will win if they have matched three of their symbols in a row (Horizontal, Vertical, Diagonal)
+     * @return true if player has met a win condition.
+     */
     public boolean checkWin() {
 
         for (lab3.game.winConditions wc : winConditions) {
@@ -66,25 +89,59 @@ public class Board {
         return false;
     }
 
-    // Check if the game is a tie
+    /**
+     * Checks the available coordinates list to see if there are no more moves to make.
+     * @return true if no moves available.
+     */
     public boolean isTie() {
         return availableCoords.isEmpty();
         // no need to check for win since ties are checked for after wins
     }
 
-    //Prompt a move on the board
-    public boolean setMove(Coordinates move, String playerSymbol) {
+    /**
+     * Places a player's move on the board.
+     *
+     *
+     * @param move The coordinate the player has inputted for their move
+     * @return true if move is successful, false if the move has already been taken
+     */
+    public boolean setMove(Coordinates move) {
         if (!availableCoords.contains(move)) {
             return false;
         }
-        tileMap.put(move, playerSymbol);
+        tileMap.put(move, currentPlayerSymbol());
         availableCoords.remove(move);
         return true;
     }
 
+    /**
+     * Sets the current player to  1
+     */
+    public static void resetPlayers() {
+        currentPlayer = 1;
+    }
+
+    /**
+     * Switches which is the current player to play their next turn
+     */
+    public static void switchPlayer() {
+        currentPlayer = (currentPlayer == 1) ? 2 : 1;
+    }
+
+    /**
+     * checks for the current players symbol (either X or O)
+     * @return a string containing either 'X' or 'O'
+     */
+    public static String currentPlayerSymbol() {
+        return currentPlayer == 1 ? "X" : "O";
+    }
 
 
-    // Display the board
+
+    /**
+     *
+     * @return Returns a string representation of the board
+     */
     @Override
     public String toString() {
         return String.format(

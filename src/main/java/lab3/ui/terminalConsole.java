@@ -5,35 +5,58 @@ import lab3.game.Coordinates;
 
 import java.util.Scanner;
 
+import static lab3.game.Board.currentPlayerSymbol;
 import static lab3.game.winRecord.callScore;
 
-public class terminalConsole {
-    private final Board board;
-    private static int currentPlayer = 1;
 
+
+public class terminalConsole {
+
+    private final Board board;
+
+    /**
+     * Creates a terminalConsole instance to interact with the board object
+     * @param board the tic tac toe board
+     */
     public terminalConsole(Board board) {
         this.board = board;
     }
 
+    /**
+     * Displays the current board state
+     */
     public void displayBoard() {
         System.out.println(board);
     }
 
+    /**
+     * Prints a message to the console
+     * @param message the message to be printed
+     */
     public static void println(String message) {
         System.out.println(message);
     }
 
-
+    /**
+     * Displays a message if a player has reached a win state
+     */
     public static void displayWin() {
         println("PLAYER " + currentPlayerSymbol() + " HAS WON");
         println(String.format("THE SCORE IS NOW %s (X) VS %s (O)", callScore().XWins(), callScore().OWins()));
     }
 
+    /**
+     * Displays a tie message if neither player was able to reach a win state
+     */
     public static void displayTie() {
         println("TIE GAME, NO ONE WINS!");
         println(String.format("THE SCORE REMAINS %s (X) VS %s (O)", callScore().XWins(), callScore().OWins()));
     }
 
+    /**
+     * Prompts both players if they would like to play again
+     * @return true if both players want to play again, false if not
+     */
     public boolean rematch() {
         Scanner scanner = new Scanner(System.in);
         println("Do both players wish to play again? (y/n)");
@@ -55,7 +78,9 @@ public class terminalConsole {
             }
         }
     }
-
+    /**
+     * Prompts the current player to place a move on the board
+     */
     public void move() {
         Scanner scanner = new Scanner(System.in);
 
@@ -65,7 +90,7 @@ public class terminalConsole {
 
             try {
                 Coordinates coord = Coordinates.valueOf(input);
-                if (board.setMove(coord, currentPlayerSymbol())) {
+                if (board.setMove(coord)) {
                     return;
                 } else {
                     println("Tile not available. Please enter new coordinates.");
@@ -74,18 +99,6 @@ public class terminalConsole {
                 println("Invalid coordinate. Please enter a valid move (e.g., A1, B2, C3).");
             }
         }
-    }
-
-    public void resetPlayers() {
-        currentPlayer = 1;
-    }
-
-    public void switchPlayer() {
-        currentPlayer = (currentPlayer == 1) ? 2 : 1;
-    }
-
-    public static String currentPlayerSymbol() {
-        return currentPlayer == 1 ? "X" : "O";
     }
 
 }

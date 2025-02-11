@@ -5,6 +5,14 @@ import lab3.ui.terminalConsole;
 
 
 public class terminalMain {
+    /**
+     * This is the main game loop for tic tac toe.
+     * It initializes a game board and a terminal console interface.
+     * It then alternates between each player continually prompting each to make a move.
+     * When one player reaches a win condition, the game will end and both players will be prompted to play again.
+     * If the players reach a tie, the game ends and both players are prompted to play again.
+     * The game board is reset after each game is completed to allow for rematches
+     */
     public static void main(String[] args) {
 
         Board board = new Board();
@@ -16,12 +24,12 @@ public class terminalMain {
 
 
             if (board.checkWin()) {
-                Board.addPoints(terminalConsole.currentPlayerSymbol());
+                Board.addPoints(Board.currentPlayerSymbol());
                 game.displayBoard();
                 terminalConsole.displayWin();
                 if (game.rematch()) {
                     Board.resetGame();
-                    game.resetPlayers();
+                    Board.resetPlayers();
                     continue;
                 } else {
                     break;
@@ -33,14 +41,14 @@ public class terminalMain {
 
                 if (game.rematch()) {
                     Board.resetGame();
-                    game.resetPlayers();
+                    Board.resetPlayers();
                     continue;
                 } else {
                     break;
                 }
             }
 
-            game.switchPlayer();
+            Board.switchPlayer();
 
         }
     }
